@@ -1,7 +1,7 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWNrZXJtYW5zaiIsImEiOiJjazhydDgyemIwNXhuM2VxejlvbDg0dm03In0.BX33WuCGqmsXjDS-k28mqQ';
 const mapboxStyle = 'mapbox://styles/mapbox/dark-v10';
 // const dataLink = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv';
-const dataLink = '../data/time_series_covid19_confirmed_global.csv';
+const dataLink = 'data/time_series_covid19_confirmed_global.csv';
 const mapCenter = [31.4606, 20.7927];
 const mapZoom = 1;
 const slider = document.getElementById('slider');
