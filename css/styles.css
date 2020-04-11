@@ -1,0 +1,103 @@
+body { 
+    margin: 0; padding: 0;
+}
+
+#map { 
+    position: absolute; top: 0; 
+    bottom: 0; width: 100%;
+}
+
+.map-controls-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 20px 10px;
+}
+     
+.map-controls {
+    background-color: #fff;
+    font: 12px/20px Arial;
+    border-radius: 10px;
+    padding: 10px;
+}
+     
+h2 {
+    line-height: 24px;
+    display: block;
+    margin: 0 0 10px;
+}
+
+p {
+    border-bottom: 1px solid #ddd;
+    margin: 10px 19px 9px 0;
+    padding-bottom: 5px;
+}
+     
+input {
+    margin: 0;
+}
+
+.dateControls {
+    border-right: 2px solid #eee;
+    display: inline-block;
+    margin: 0 0 0 10px;
+    padding-right: 30px;
+}
+
+.autorunControls {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.speedSelectors {
+    margin: 0 0 2px;
+}
+
+.dateLabel {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 0 10px;
+}
+
+.slider {
+    bottom: -3px;
+    cursor: pointer;
+    position: relative;
+    width: 100%;
+}
+
+.autorun {
+    cursor: pointer;
+}
+
+.speeds label {
+    margin-right: 20px;
+}
+
+.marker-container {
+    width:auto; 
+    height:auto;
+    transform-origin: center center;
+}
+
+.marker {
+    background-color:rgba(255,0,0,0.5);
+    box-sizing:border-box;
+    display: flex;
+    border-radius:50%;
+    /* box-shadow: 0 0 10px #ff0000, inset 0 0 20px #ff0000; */
+    transform-origin: center center;
+}
+
+.marker span {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    box-sizing:border-box;
+    color:#fff;
+    cursor: pointer;
+    transform-origin:0 0;
+    width: 100%;
+    transform-origin: 0;
+}

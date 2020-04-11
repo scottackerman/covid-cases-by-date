@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Coronavirus spread by date</title>
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+
+        <link href="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+    </head>
+    
+    <body>
+    
+        <div id="map"></div>
+
+        <div class="map-controls-container">
+            <div class="map-controls">
+                <form name="visControls">
+                    <div class="dateControls">
+                        <h2>Covid cases by date</h2>
+                        <label id="dateLabel" class="dateLabel">Retrieving date info</label>
+                        <input id="slider" class="slider" type="range" min="0" step="1" value="0" />
+                    </div>
+                    <div class="autorunControls">
+                        <div class="autoplay">
+                            <input type="checkbox" id="autorun" class="autorun" name="autorun" value="autorun">
+                            <label for="autorun">Autoplay</label>
+                        </div>
+                        <div class="speeds">
+                            <p>Autoplay speed:</p>
+                            <div class="speedSelectors">
+                                <input type="radio" id="slow" name="speed" value="slowSpeed">
+                                <label for="slow">Slow</label>
+                                <input type="radio" id="medium" name="speed" value="mediumSpeed" checked>
+                                <label for="medium">Medium</label>
+                                <input type="radio" id="fast" name="speed" value="fastSpeed">
+                                <label for="fast">Fast</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <script src="https://api.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js"></script>
+        <script src="js/covidMap.js"></script>
+    </body>
+</html>
