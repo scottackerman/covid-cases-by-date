@@ -153,6 +153,7 @@ input {
 .graph-container {
     float: right;
     width: 68%;
+    margin-right: 2%;
 }
 
 .graph {
