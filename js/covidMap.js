@@ -1,13 +1,23 @@
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWNrZXJtYW5zaiIsImEiOiJjazhydDgyemIwNXhuM2VxejlvbDg0dm03In0.BX33WuCGqmsXjDS-k28mqQ';
 const mapboxStyle = 'mapbox://styles/mapbox/dark-v10';
 // const dataLink = 'https://data.humdata.org/hxlproxy/api/data-preview.csv?url=https%3A%2F%2Fraw.githubusercontent.com%2FCSSEGISandData%2FCOVID-19%2Fmaster%2Fcsse_covid_19_data%2Fcsse_covid_19_time_series%2Ftime_series_covid19_confirmed_global.csv&filename=time_series_covid19_confirmed_global.csv';
+const outcomesLink = 'http://api.coronastatistics.live/timeline/global';
 const dataLink = '/data/time_series_covid19_confirmed_global.csv';
 const mapCenter = [31.4606, 20.7927];
 const mapZoom = 1;
+const scaleOffset = 20;
+const minScale = 25;
 const slider = document.getElementById('slider');
 const autorunCheckbox = document.getElementById('autorun');
 const dateLabel = document.getElementById('dateLabel');
 const radios = document.forms['visControls'].elements['speed'];
+const activeGraph = document.getElementById('active');
+const recoveredGraph = document.getElementById('recovered');
+const deathGraph = document.getElementById('deaths');
+const activeTotal = document.getElementById('active-total');
+const recoveredTotal = document.getElementById('recovered-total');
+const deathTotal = document.getElementById('death-total');
+const outcomesRequest = new XMLHttpRequest();
 
 var map;
 var dates;
@@ -15,9 +25,11 @@ var headers;
 var autoRun;
 var autorunning = true;
 var jsonData;
+var totalCases;
 var slowSpeed = 1500;
 var mediumSpeed = 500;
 var fastSpeed = 100;
+var outcomes = [];
 var featureArray = [];
 var currentMarkers = [];
 var selectedDateIndex = 0;
@@ -58,9 +70,8 @@ function buildMapFeaturesArray() {
 
 function setScaleOfMarker(val) {
     var scale = Math.round(100*Math.log(val)/Math.log(10))/100;
-    // SAckerman - make these numbers vars..
-    scale = scale * 20;
-    scale = ((scale > 25) ? scale : 25);
+    scale = scale * scaleOffset;
+    scale = ((scale > minScale) ? scale : minScale);
     return scale;
 };
 
@@ -72,13 +83,13 @@ function removeMarkersFromMap() {
     }
 }
 
-function addMarkersToMap(dateIndex) {
+function addMarkersToMap() {
     featureArray.forEach(function(marker, i) {
-        if(parseInt(jsonData[i][dates[dateIndex]]) > 0) {
-            var markerScale = setScaleOfMarker(jsonData[i][dates[dateIndex]]);
+        if(parseInt(jsonData[i][dates[selectedDateIndex]]) > 0) {
+            var markerScale = setScaleOfMarker(jsonData[i][dates[selectedDateIndex]]);
             var el = document.createElement('div');
             el.className = 'marker-container';
-            el.innerHTML = '<div class="marker" style="width: ' + markerScale + 'px; height: ' + markerScale + 'px;"><span>' + jsonData[i][dates[dateIndex]] + '</span></div>'
+            el.innerHTML = '<div class="marker" style="width: ' + markerScale + 'px; height: ' + markerScale + 'px;"><span>' + jsonData[i][dates[selectedDateIndex]] + '</span></div>'
             new mapboxgl.Marker(el)
             .setLngLat(marker.geometry.coordinates)
             .addTo(map);
@@ -93,6 +104,31 @@ function killAutoPlay() {
     autorunCheckbox.checked = false;
 }
 
+function getGraphPercentage(val) {
+    return val/totalCases*100;
+}
+
+function numberWithCommas(num) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function updateStatusGraph() {
+    activeTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].cases); // TODO - add commas to large numbers
+    recoveredTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].recovered);
+    deathTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].deaths);
+    activeGraph.style.minWidth = getGraphPercentage(outcomes[selectedDateIndex].cases) + "%";
+    recoveredGraph.style.minWidth = getGraphPercentage(outcomes[selectedDateIndex].recovered) + "%";
+    deathGraph.style.minWidth = getGraphPercentage(outcomes[selectedDateIndex].deaths) + "%";
+}
+
+function setDateOnMap(dateIndex) {
+    selectedDateIndex = dateIndex;
+    dateLabel.textContent = 'Data for : ' + dates[dateIndex];
+    removeMarkersFromMap();
+    addMarkersToMap();
+    updateStatusGraph();
+}
+
 function autoIncrementDate() {
     autorunCheckbox.checked = true;
     selectedDateIndex++;
@@ -103,13 +139,6 @@ function autoIncrementDate() {
     setDateOnMap(selectedDateIndex);
 }
 
-function setDateOnMap(dateIndex) {
-    selectedDateIndex = dateIndex;
-    dateLabel.textContent = 'Data for : ' + dates[dateIndex];
-    removeMarkersFromMap();
-    addMarkersToMap(dateIndex);
-}
-
 function init() {
     slider.setAttribute('max', dates.length - 1);
     setDateOnMap(0);
@@ -117,6 +146,7 @@ function init() {
 }
 
 map = new mapboxgl.Map({
+    attributionControl: false,
     container: 'map',
     style: mapboxStyle,
     center: mapCenter,
@@ -167,3 +197,16 @@ for(var i = 0, max = radios.length; i < max; i++) {
         autoRun = setInterval(autoIncrementDate, currentSpeed);
     }
 }
+
+// Load outcomes
+outcomesRequest.open('GET', outcomesLink, true);
+
+outcomesRequest.onload = function() {
+    var data = JSON.parse(outcomesRequest.responseText);
+    for(var prop in data) {
+        outcomes.push(data[prop]); 
+    }
+    totalCases = outcomes[outcomes.length - 1].cases;
+};
+
+outcomesRequest.send();

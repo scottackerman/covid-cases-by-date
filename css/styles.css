@@ -1,16 +1,23 @@
+.mapboxgl-ctrl-logo {
+    display: none !important;
+}
+
 body { 
     margin: 0; padding: 0;
 }
 
 #map { 
-    position: absolute; top: 0; 
-    bottom: 0; width: 100%;
+    bottom: 0; 
+    height: 100%;
+    position: absolute; 
+    top: 0; 
+    width: 100%;
 }
 
 .map-controls-container {
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     padding: 20px 10px;
 }
      
@@ -100,4 +107,75 @@ input {
     transform-origin:0 0;
     width: 100%;
     transform-origin: 0;
+}
+
+.outcomes-container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 20px 10px;
+}
+
+.outcomes {
+    background-color: #fff;
+    font: 12px/20px Arial;
+    border-radius: 10px;
+    padding: 10px;
+    width: 464px;
+}
+
+.outcomes h2 {
+    border-bottom: 1px solid #ddd;
+    margin: 0 0 2px;
+}
+
+.label-container {
+    display: inline-block;
+    width: 15%;
+}
+
+.label-container h3 {
+    font-size: 12px;
+    margin: 0;
+}
+
+.totals-container {
+    float: right;
+    width: 15%;
+}
+
+.totals-container h4 {
+    font-size: 12px;
+    font-weight: 100;
+    margin: 0;
+}
+
+.graph-container {
+    float: right;
+    width: 68%;
+}
+
+.graph {
+    border: 1px solid gray;
+    border-radius: 5px;
+    height: 10px;
+    margin: 4px 0 9px;
+}
+
+#deaths {
+    background-color: mediumvioletred;
+    min-width: 2%;
+    width: 2%;
+}
+
+#recovered {
+    background-color: seagreen;
+    min-width: 2%;
+    width: 2%;
+}
+
+#active {
+    background-color: darkslategray;
+    min-width: 2%;
+    width: 2%;
 }
