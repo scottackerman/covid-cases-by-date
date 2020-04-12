@@ -34,6 +34,8 @@ var featureArray = [];
 var currentMarkers = [];
 var selectedDateIndex = 0;
 var currentSpeed = mediumSpeed;
+let mapReady = false;
+let globalTimelineDataReady = false;
 
 function csvToJson(csv){
     var lines = csv.split("\n");
@@ -113,7 +115,7 @@ function numberWithCommas(num) {
 }
 
 function updateStatusGraph() {
-    activeTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].cases); // TODO - add commas to large numbers
+    activeTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].cases);
     recoveredTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].recovered);
     deathTotal.innerHTML = numberWithCommas(outcomes[selectedDateIndex].deaths);
     activeGraph.style.minWidth = getGraphPercentage(outcomes[selectedDateIndex].cases) + "%";
@@ -140,9 +142,13 @@ function autoIncrementDate() {
 }
 
 function init() {
-    slider.setAttribute('max', dates.length - 1);
-    setDateOnMap(0);
-    autoRun = setInterval(autoIncrementDate, currentSpeed);
+    if(mapReady && globalTimelineDataReady) {
+        slider.setAttribute('max', dates.length - 1);
+        setDateOnMap(0);
+        autoRun = setInterval(autoIncrementDate, currentSpeed);
+    } else {
+        setTimeout(init, 500);
+    }
 }
 
 map = new mapboxgl.Map({
@@ -169,6 +175,7 @@ map.on('load', function() {
         });
         map.on('move', killAutoPlay);
         map.on('zoom', killAutoPlay);
+        mapReady = true;
         init();
     });
 });
@@ -206,6 +213,7 @@ outcomesRequest.onload = function() {
     for(var prop in data) {
         outcomes.push(data[prop]); 
     }
+    globalTimelineDataReady = true;
     totalCases = outcomes[outcomes.length - 1].cases;
 };
 
